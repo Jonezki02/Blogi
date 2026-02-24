@@ -1,0 +1,21 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getAllPosts } from '../lib/posts';
+
+const posts = getAllPosts();
+---
+
+<Layout>
+<h1>Posts</h1>
+
+<ul>
+  {posts.map(post => (
+    <li>
+      <a href={`/posts/${post.slug}`}>
+        {post.data.title}
+      </a>
+      <p>{post.snippet}</p>
+    </li>
+  ))}
+</ul>
+</Layout>

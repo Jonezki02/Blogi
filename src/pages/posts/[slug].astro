@@ -1,0 +1,23 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getAllPosts, getPost } from '../../lib/posts';
+
+export async function getStaticPaths() {
+
+  const posts = getAllPosts();
+
+  return posts.map(post => ({
+    params: { slug: post.slug }
+  }));
+}
+
+const post = await getPost(`${Astro.params.slug}.md`);
+---
+
+<Layout>
+<article>
+  <h1>{post.data.title}</h1>
+  
+  <div set:html={post.contentHtml}></div>
+</article>
+</Layout>

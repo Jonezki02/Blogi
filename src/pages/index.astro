@@ -1,16 +1,139 @@
 ---
+import Layout from '../layouts/Layout.astro';
+import { getAllPosts } from '../lib/posts';
 
+const posts = getAllPosts();
+const three = posts.slice(0, 3);
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<style>
+  .hero {
+    position: relative;
+    width: 100%;
+    height: 60vh;
+    overflow: hidden;
+  }
+
+  .hero img {
+    width: 100%;
+    height: 60vh;
+    object-fit: cover;
+    display: block;
+  }
+
+  .hero-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 1000px;
+    width: 100%;
+    padding: 1rem;
+    color: white;
+    z-index: 10;
+    margin-left: 1rem;
+  }
+
+
+
+  .container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 3rem 1rem;
+  }
+
+  .container h2 {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    color: #1a3a1a;
+  }
+
+  .posts-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    margin-bottom: 3rem;
+  }
+
+  .post-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+  }
+
+  .post-card a {
+  display: inline-block;
+  padding: 0.5rem 1.5rem;
+  background: #2d4a2d;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  font-weight: 500;
+  transition: background 0.2s;
+}
+
+.post-card a:hover {
+  background: #3d5a3d;
+}
+
+.view-all {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.view-all a {
+  display: inline-block;
+  padding: 0.75rem 2rem;
+  background: #2d4a2d;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  font-weight: 500;
+  transition: background 0.2s;
+}
+
+.view-all a:hover {
+  background: #3d5a3d;
+}
+
+  @media (max-width: 768px) {
+    .hero {
+      height: 40vh;
+  }
+
+</style>
+
+<Layout>
+  <section class="hero">
+    <img src="/background.jpg" alt="" />
+    <div class="hero-overlay">
+      <h1>Dear me in a new land</h1>
+    </div>
+  </section>
+  
+  <main class="container">
+    <h2>Latest Posts</h2>
+    
+    <div class="posts-grid">
+      {three.map(post => (
+        <article class="post-card">
+          <h3>{post.data.title}</h3>
+          <p class="date">
+            {new Date(post.data.date).toLocaleDateString('en-GB', {
+              day: '2-digit',
+              month: '2-digit',
+              year: 'numeric'
+            })}
+          </p>
+          <p class="snippet">{post.snippet}</p>
+          <a href={`/posts/${post.slug}`}>Read More</a>
+        </article>
+      ))}
+    </div>
+    
+    <div class="view-all">
+      <a href="/posts">View All Posts</a>
+    </div>
+  </main>
+</Layout>
