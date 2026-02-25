@@ -100,3 +100,56 @@ export function createPost(
 
   return true;
 }
+
+export function getRawPost(
+  slug: string,
+): { slug: string; title: string; date: string; content: string } | null {
+  const fullPath = path.join(postsDir, `${slug}.md`);
+
+  if (!fs.existsSync(fullPath)) {
+    return null;
+  }
+
+  const fileContents = fs.readFileSync(fullPath, "utf8");
+  const { data, content } = matter(fileContents);
+
+  return {
+    slug,
+    title: data.title || "",
+    date: data.date ? new Date(data.date).toISOString().split("T")[0] : "",
+    content: content.trim(),
+  };
+}
+
+export function updatePost(
+  slug: string,
+  title: string,
+  date: string,
+  content: string,
+): boolean {
+  const fullPath = path.join(postsDir, `${slug}.md`);
+
+  if (!fs.existsSync(fullPath)) {
+    return false;
+  }
+
+  fs.writeFileSync(
+    fullPath,
+    `---\ntitle: "${title}"\ndate: ${date}\n---\n\n${content}\n`,
+    "utf8",
+  );
+
+  return true;
+}
+
+export function deletePost(slug: string): boolean {
+  const fullPath = path.join(postsDir, `${slug}.md`);
+
+  if (!fs.existsSync(fullPath)) {
+    return false;
+  }
+
+  fs.unlinkSync(fullPath);
+
+  return true;
+}

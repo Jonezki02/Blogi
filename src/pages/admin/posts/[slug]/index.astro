@@ -1,6 +1,6 @@
 ---
-import AuthAdminLayout from "../../../layouts/AuthAdminLayout.astro";
-import { getPost } from "../../../lib/posts";
+import AuthAdminLayout from "../../../../layouts/AuthAdminLayout.astro";
+import { getPost } from "../../../../lib/posts";
 
 const { slug } = Astro.params;
 const post = await getPost(slug!);
@@ -11,7 +11,9 @@ if (!post) {
 ---
 
 <AuthAdminLayout>
-  <a href={`/admin`}>Back to article list</a>
+  <a href="/admin">Back to article list</a>
+  <a href={`/admin/posts/${post.slug}/edit`}>Edit</a>
+  <a href={`/admin/posts/${post.slug}/delete`}>Delete</a>
   <h1>{post.title}</h1>
   <p>{new Date(post.date).toLocaleDateString("en-US")}</p>
   <article set:html={post.contentHtml} />

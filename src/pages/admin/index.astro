@@ -31,6 +31,8 @@ const posts = getAllPosts();
             </td>
             <td>
               <a href={`/admin/posts/${post.slug}`}>View</a>
+              <a href={`/admin/posts/${post.slug}/edit`}>Edit</a>
+              <a href={`/admin/posts/${post.slug}/delete`}>Delete</a>
             </td>
           </tr>
         ))

@@ -1,0 +1,53 @@
+---
+import AuthAdminLayout from "../../../../layouts/AuthAdminLayout.astro";
+import { getRawPost, updatePost } from "../../../../lib/posts";
+
+const { slug } = Astro.params;
+const post = getRawPost(slug!);
+
+if (!post) {
+  return Astro.redirect("/admin");
+}
+
+let error = "";
+
+if (Astro.request.method === "POST") {
+  const formData = await Astro.request.formData();
+  const title = ((formData.get("title") as string) || "").trim();
+  const date = ((formData.get("date") as string) || "").trim();
+  const content = ((formData.get("content") as string) || "").trim();
+
+  if (!title || !date || !content) {
+    error = "Fill all required fields";
+  } else {
+    const success = updatePost(slug!, title, date, content);
+
+    if (!success) {
+      error = "Failed to update article";
+    } else {
+      return Astro.redirect(`/admin/posts/${slug}`);
+    }
+  }
+}
+---
+
+<AuthAdminLayout>
+  <a href={`/admin/posts/${slug}`}>Cancel</a>
+  <h1>Edit {post.title}</h1>
+  {error && <p>{error}</p>}
+  <form method="POST">
+    <div>
+      <label for="title">Title</label>
+      <input type="text" id="title" name="title" value={post.title} required />
+    </div>
+    <div>
+      <label for="date">Date</label>
+      <input type="date" id="date" name="date" value={post.date} required />
+    </div>
+    <div>
+      <label for="content">Content (markdown)</label>
+      <textarea id="content" name="content" required>{post.content}</textarea>
+    </div>
+    <button type="submit">Save</button>
+  </form>
+</AuthAdminLayout>

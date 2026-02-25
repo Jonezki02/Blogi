@@ -1,0 +1,25 @@
+---
+import AuthAdminLayout from "../../../../layouts/AuthAdminLayout.astro";
+import { getRawPost, deletePost } from "../../../../lib/posts";
+
+const { slug } = Astro.params;
+const post = getRawPost(slug!);
+
+if (!post) {
+  return Astro.redirect("/admin");
+}
+
+if (Astro.request.method === "POST") {
+  deletePost(slug!);
+  return Astro.redirect("/admin");
+}
+---
+
+<AuthAdminLayout>
+  <a href={`/admin/posts/${slug}`}>Cancel</a>
+  <h1>Delete: {post.title}</h1>
+  <p>Are you sure? This cannot be undone.</p>
+  <form method="POST">
+    <button type="submit">Yes, delete</button>
+  </form>
+</AuthAdminLayout>
