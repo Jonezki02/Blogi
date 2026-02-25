@@ -118,9 +118,9 @@ const three = posts.slice(0, 3);
     <div class="posts-grid">
       {three.map(post => (
         <article class="post-card">
-          <h3>{post.data.title}</h3>
+          <h3>{post.title}</h3>
           <p class="date">
-            {new Date(post.data.date).toLocaleDateString('en-GB', {
+            {new Date(post.date).toLocaleDateString('en-US', {
               day: '2-digit',
               month: '2-digit',
               year: 'numeric'

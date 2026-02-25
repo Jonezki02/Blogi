@@ -1,23 +1,29 @@
 ---
-import Layout from '../../layouts/Layout.astro';
-import { getAllPosts, getPost } from '../../lib/posts';
+import Layout from "../../layouts/Layout.astro";
+import { getAllPosts, getPost } from "../../lib/posts";
 
 export async function getStaticPaths() {
-
   const posts = getAllPosts();
 
-  return posts.map(post => ({
-    params: { slug: post.slug }
+  return posts.map((post) => ({
+    params: { slug: post.slug },
   }));
 }
 
-const post = await getPost(`${Astro.params.slug}.md`);
+const post = await getPost(Astro.params.slug!);
 ---
 
 <Layout>
-<article>
-  <h1>{post.data.title}</h1>
-  
-  <div set:html={post.contentHtml}></div>
-</article>
+  {
+    !!post ? (
+      <article>
+        <h1>{post.title}</h1>
+        <p>{post.date}</p>
+
+        <div set:html={post.contentHtml} />
+      </article>
+    ) : (
+      <p>Not found 404</p>
+    )
+  }
 </Layout>
