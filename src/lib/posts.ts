@@ -75,3 +75,28 @@ export async function getPost(slug: string): Promise<Post | null> {
     contentHtml: processed.toString(),
   };
 }
+
+export function createPost(
+  slug: string,
+  title: string,
+  date: string,
+  content: string,
+): boolean {
+  if (!fs.existsSync(postsDir)) {
+    fs.mkdirSync(postsDir, { recursive: true });
+  }
+
+  const fullPath = path.join(postsDir, `${slug}.md`);
+
+  if (fs.existsSync(fullPath)) {
+    return false;
+  }
+
+  fs.writeFileSync(
+    fullPath,
+    `---\ntitle: "${title}"\ndate: ${date}\n---\n\n${content}\n`,
+    "utf8",
+  );
+
+  return true;
+}
