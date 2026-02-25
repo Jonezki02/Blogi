@@ -1,10 +1,41 @@
 ---
 import AuthAdminLayout from "../../layouts/AuthAdminLayout.astro";
+import { getAllPosts } from "../../lib/posts";
+
+const posts = getAllPosts();
 ---
 
 <AuthAdminLayout>
-  <div>
-    <h1>Admin Panel</h1>
-    <p>Logged in</p>
-  </div>
+  <h1>Articles</h1>
+  <a href="/admin?new=1">Write new article</a>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Date</th>
+        <th>Slug</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {
+        posts.map((post) => (
+          <tr>
+            <td>
+              <strong>{post.title}</strong>
+            </td>
+            <td>{new Date(post.date).toLocaleDateString("en-US")}</td>
+            <td>
+              <code>{post.slug}</code>
+            </td>
+            <td>
+              <a href={`/admin/posts/${post.slug}`}>View</a>
+            </td>
+          </tr>
+        ))
+      }
+      {posts.length === 0 && <p>No articles</p>}
+    </tbody>
+  </table>
 </AuthAdminLayout>

@@ -6,7 +6,16 @@ import html from "remark-html";
 
 const postsDir = path.join(process.cwd(), "src/content/posts");
 
-export function getAllPosts() {
+export interface Post {
+  slug: string;
+  title: string;
+  date: string;
+  snippet: string;
+  content?: string;
+  contentHtml?: string;
+}
+
+export function getAllPosts(): Post[] {
   const fileNames = fs.readdirSync(postsDir);
 
   return fileNames
@@ -24,22 +33,26 @@ export function getAllPosts() {
 
       return {
         slug,
-        fileName,
-        data,
+        title: data.title,
+        date: data.date
+          ? new Date(data.date).toISOString()
+          : new Date().toISOString(),
         snippet,
       };
     })
     .sort((a, b) => {
-      const dateA = new Date(a.data.date);
-      const dateB = new Date(b.data.date);
+      const dateA = new Date(a.date);
+      const dateB = new Date(b.date);
       return dateB.getTime() - dateA.getTime();
     });
 }
 
-export async function getPost(fileName: string) {
-  const slug = fileName.replace(".md", "");
+export async function getPost(slug: string): Promise<Post | null> {
+  const fullPath = path.join(postsDir, `${slug}.md`);
 
-  const fullPath = path.join(postsDir, fileName);
+  if (!fs.existsSync(fullPath)) {
+    return null;
+  }
 
   const fileContents = fs.readFileSync(fullPath, "utf8");
 
@@ -47,9 +60,18 @@ export async function getPost(fileName: string) {
 
   const processed = await remark().use(html).process(content);
 
+  const plainText = content.replace(/[#*_\-\[\]]/g, "");
+  const snippet =
+    plainText.length > 150 ? plainText.substring(0, 150) + "..." : plainText;
+
   return {
     slug,
-    data,
+    title: data.title || "Nimetön",
+    date: data.date
+      ? new Date(data.date).toISOString()
+      : new Date().toISOString(),
+    snippet,
+    content,
     contentHtml: processed.toString(),
   };
 }

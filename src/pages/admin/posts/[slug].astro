@@ -1,0 +1,18 @@
+---
+import AuthAdminLayout from "../../../layouts/AuthAdminLayout.astro";
+import { getPost } from "../../../lib/posts";
+
+const { slug } = Astro.params;
+const post = await getPost(slug!);
+
+if (!post) {
+  return Astro.redirect("/admin");
+}
+---
+
+<AuthAdminLayout>
+  <a href={`/admin`}>Back to article list</a>
+  <h1>{post.title}</h1>
+  <p>{new Date(post.date).toLocaleDateString("en-US")}</p>
+  <article set:html={post.contentHtml} />
+</AuthAdminLayout>
