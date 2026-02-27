@@ -20,11 +20,88 @@ if (Astro.request.method === "POST") {
 }
 ---
 
+<style>
+  .delete-container {
+    max-width: 500px;
+    margin: 3rem auto;
+    padding: 0 1rem;
+  }
+
+  .delete-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+  }
+
+  h1 {
+    color: #1a3a1a;
+    margin-bottom: 1rem;
+  }
+
+  p {
+    color: #666;
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+  }
+
+  .warning {
+    background: #fff3cd;
+    border: 1px solid #ffeaa7;
+    padding: 1rem;
+    border-radius: 4px;
+    margin-bottom: 1.5rem;
+    color: #856404;
+    font-weight: 600;
+  }
+
+  .actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+  }
+
+  button, .cancel {
+    padding: 0.6rem 1.2rem;
+    border-radius: 4px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+  }
+
+  .cancel {
+    background: #f0f0f0;
+    color: #333;
+    display: inline-block;
+  }
+
+  .cancel:hover {
+    background: #e0e0e0;
+  }
+
+  button {
+    background: #a84a4a;
+    color: white;
+  }
+
+  button:hover {
+    background: #b85a5a;
+  }
+</style>
+
 <AuthAdminLayout>
-  <a href={`/admin/posts/${slug}`}>Cancel</a>
-  <h1>Delete: {post.title}</h1>
-  <p>Are you sure? This cannot be undone.</p>
-  <form method="POST">
-    <button type="submit">Yes, delete</button>
-  </form>
+  <div class="delete-container">
+    <div class="delete-card">
+      <h1>Delete: {post.title}</h1>
+      <div class="warning">This action cannot be undone.</div>
+      <p>Are you sure you want to permanently delete this article?</p>
+      <form method="POST">
+        <div class="actions">
+          <a href={`/admin/posts/${slug}`} class="cancel">Cancel</a>
+          <button type="submit">Delete Article</button>
+        </div>
+      </form>
+    </div>
+  </div>
 </AuthAdminLayout>

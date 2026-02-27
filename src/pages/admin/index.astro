@@ -10,9 +10,79 @@ if (sessionCookie?.value !== "unsecure_session") {
 const posts = getAllPosts();
 ---
 
+<style>
+  .admin-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+  }
+
+  .admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+  }
+
+  .admin-header h1 {
+    margin: 0;
+    color: #1a3a1a;
+  }
+
+  .btn-new {
+    display: inline-block;
+    background: #2d4a2d;
+    color: white;
+    padding: 0.6rem 1.2rem;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background 0.2s;
+  }
+
+  .btn-new:hover {
+    background: #3d5a3d;
+  }
+
+  table {
+    width: 100%;
+    background: white;
+    border-collapse: collapse;
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+  }
+
+  th, td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+  }
+
+  th {
+    background: #f8f8f8;
+    font-weight: 600;
+    color: #1a3a1a;
+  }
+
+  td a {
+    color: #2d4a2d;
+    text-decoration: none;
+    margin-right: 1rem;
+    font-weight: 500;
+  }
+
+  td a:hover {
+    text-decoration: underline;
+  }
+</style>
+
 <AuthAdminLayout>
-  <h1>Articles</h1>
-  <a href="/admin/posts/new">New article</a>
+  <div class="admin-container">
+    <div class="admin-header">
+      <h1>Articles</h1>
+      <a href="/admin/posts/new" class="btn-new">New article</a>
+    </div>
 
   <table>
     <thead>
@@ -45,4 +115,5 @@ const posts = getAllPosts();
       {posts.length === 0 && <p>No articles</p>}
     </tbody>
   </table>
+  </div>
 </AuthAdminLayout>
