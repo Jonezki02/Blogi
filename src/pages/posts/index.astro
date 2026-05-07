@@ -5,17 +5,104 @@ import { getAllPosts } from "../../lib/posts";
 const posts = getAllPosts();
 ---
 
-<Layout>
-  <h1>Posts</h1>
+<style>
+  .container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 3rem 1rem;
+  }
 
-  <ul>
-    {
-      posts.map((post) => (
-        <li>
-          <a href={`/posts/${post.slug}`}>{post.title}</a>
-          <p>{post.snippet}</p>
-        </li>
-      ))
+  .container h1 {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    color: #1a3a1a;
+    text-align: center;
+  }
+
+  .posts-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
+
+  .post-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .post-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12);
+  }
+
+  .post-card h2 {
+    margin: 0 0 0.75rem;
+    font-size: 1.4rem;
+    color: #1a3a1a;
+  }
+
+  .post-card .date {
+    margin: 0 0 1rem;
+    color: #5f6d5f;
+    font-size: 0.92rem;
+  }
+
+  .post-card p {
+    margin-bottom: 1.5rem;
+    color: #344334;
+    line-height: 1.7;
+  }
+
+  .post-card a {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    background: #2d4a2d;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: 500;
+    transition: background 0.2s;
+  }
+
+  .post-card a:hover {
+    background: #3d5a3d;
+  }
+
+  @media (max-width: 900px) {
+    .posts-grid {
+      grid-template-columns: 1fr 1fr;
     }
-  </ul>
+  }
+
+  @media (max-width: 640px) {
+    .posts-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<Layout>
+  <main class="container">
+    <h1>All Posts</h1>
+
+    <div class="posts-grid">
+      {posts.map((post) => (
+        <article class="post-card">
+          <h2>{post.title}</h2>
+          <p class="date">
+            {new Date(post.date).toLocaleDateString('en-US', {
+              day: '2-digit',
+              month: '2-digit',
+              year: 'numeric'
+            })}
+          </p>
+          <p>{post.snippet}</p>
+          <a href={`/posts/${post.slug}`}>Read more</a>
+        </article>
+      ))}
+    </div>
+  </main>
 </Layout>
